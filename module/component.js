@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular.component', ['ng'])
+angular.module('angular-component', ['ng'])
 
 .service('ResolverService', function ($http, $interpolate, $log, $q) {
 

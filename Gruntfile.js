@@ -29,7 +29,7 @@ module.exports = function (grunt) {
     meta: {
       author: 'Pablo Lázaro Palencia',
       name: 'angular-component',
-      description: 'Módulo de AngularJS para definir componentes reutilizables de forma sencilla',
+      description: 'Useful module for defining reusable components in a easy way.',
       version: '0.0.1',
       github: 'https://github.com/pablolazaro/angular-component',
       license: '',

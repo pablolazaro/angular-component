@@ -3,7 +3,7 @@
 describe('Unit: Testing ResolverService', function () {
 
     // Load module angular-component before test
-    beforeEach(module('angular.component'));
+    beforeEach(module('angular-component'));
 
     it('module should contains a ResolverService', inject(['ResolverService', function (ResolverService) {
         expect(ResolverService).not.toBe(undefined);
