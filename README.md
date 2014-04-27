@@ -60,7 +60,7 @@ Property *isMyFirstComponent* is accessible from the component scope once it has
 			 `{ "url": "/api/phones/{{myPhoneId}}", "responseName": "info" }`
 	- `config`: Configuration object which will be passed to $http service. (**Optional**)
 
-You only can use `expression` or `http` at the same time.
+You can not use `expression` and `http` at the same time.
 
 ## Acknowledgments
 
