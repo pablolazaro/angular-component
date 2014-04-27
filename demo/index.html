@@ -30,7 +30,7 @@
                              definition='[
                                             { "name": "limit", "typeof": "number", "http": { "url": "/api/config/limit" } },
                                             { "name": "contacts", "http": { "url": "/api/contacts" } },
-                                            { "name": "isLimited", "typeof":"boolean", "expression": "{{limit === contacts.length}}" }
+                                            { "name": "isLimited", "parent": "contacts", "typeof":"boolean", "expression": "{{limit < contacts.length}}" }
                                          ]'>
 
                       <ul ng-repeat="contact in contacts | limitTo: limit">
