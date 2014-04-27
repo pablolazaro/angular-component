@@ -12,4 +12,6 @@
         { "name": "myStringVar", "typeof": "string", "parent": "myNumberVar", "http": { "url": "api/telefono/{{myNumberVar}}", "responseName": "myString" } }
     ]
 
+This way, once resolved, all definitions of the JSON object will be accessible from the component scope, and without writing any piece of code!
+
 ## Usage
