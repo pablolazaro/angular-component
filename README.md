@@ -15,3 +15,7 @@
 This way, once resolved, all definitions of the JSON object will be accessible from the component scope, and without writing any piece of code!
 
 ## Usage
+
+Suppose you need a reusable component in your web application using **AngularJS**.
+This component should work fine in every place where you place it, regardless of what surrounds it and independently of route changes of the application (and possible resolve function which come with it).
+So, what do you need to do to achieve this requirements using *angular-component*?.
