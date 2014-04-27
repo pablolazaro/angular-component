@@ -4,7 +4,7 @@ Useful module for define reusable components in a easy way.
 
 ## How it works
 
-*angular-component* module contains a *directive* called **component**. Through this directive you can define components just writing a simple JSON object as follows:
+*angular-component* module contains a directive* called `component`. Through this directive you can define components just writing a simple JSON object as follows:
 
     [
         { "name": "myBooleanVar", "typeof": "boolean", "expression": "true", "condition": "" },
@@ -12,7 +12,7 @@ Useful module for define reusable components in a easy way.
         { "name": "myStringVar", "typeof": "string", "parent": "myNumberVar", "http": { "url": "api/telefono/{{myNumberVar}}", "responseName": "myString" } }
     ]
 
-This way, once all definitions has been resolved they will be accessible from the component scope, and without writing any piece of  JavaScript code!
+This way, once all definitions has been resolved they will be accessible from the component scope, and without writing any piece of JavaScript code!
 
 ## Usage
 
@@ -40,26 +40,27 @@ Property *isMyFirstComponent* is accessible from the component scope once it has
 
 [...]
 
+
 ## Definition object options
 
- - **name**: Name that will have the object in the component scope. (**Required**)
+ - `name`: Name that will have the object in the component scope. (**Required**)
 		{ "name": "myPhoneId" }
- - **typeof**: Will convert the object value to specified type. (**Optional**)
+ - `typeof*`: Will convert the object value to specified type. (**Optional**)
 		 { "name": "myPhoneId", "typeof": "number" }
- - **parent**: Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
+ - `parent`: Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
 		 { "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName" }
- - **condition**: Expression that must be satisfied in order to resolve the object. (**Optional**)
+ - `condition`: Expression that must be satisfied in order to resolve the object. (**Optional**)
 		 { "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName", "condition": "{{parentVariableName === true}}" }
- - **expression**: The value of the expression will be the value of the object. You could use AngularJS expression. (**Optional**)
+ - `expression`: The value of the expression will be the value of the object. You could use AngularJS expression. (**Optional**)
 		{ "name": "parentVariableName", "expression": "true === true"}
- - **http**: The value of the expression will be the response of the HTTP GET request defined. You could configure the request this way:
-	- **url**: Request URL as string, you could use AngularJS expressions. (**Required**)
+ - `http`: The value of the expression will be the response of the HTTP GET request defined. You could configure the request this way:
+	- `url`: Request URL as string, you could use AngularJS expressions. (**Required**)
 			 { "url": "/api/phones/{{myPhoneId}}"}
-	- **responseName**: Name of the object in response which contains desired value. If empty, definition object name will be use. (**Optional**)
+	- `*responseName`: Name of the object in response which contains desired value. If empty, definition object name will be use. (**Optional**)
 			 { "url": "/api/phones/{{myPhoneId}}", "responseName": "info" }
-	- **config**: Configuration object which will be passed to $http service. (**Optional**)
+	- `config`: Configuration object which will be passed to $http service. (**Optional**)
 
-You only can use **expression** or **http** at the same time.
+You only can use `expression` or `http` at the same time.
 
 ## Acknowledgments
 
