@@ -50,13 +50,26 @@ angular.module('angular.component', ['ng'])
 
             switch (type.toLowerCase()) {
                 case 'string':
-                    convertedValue = String(value);
+                    convertedValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
                     break;
                 case 'number':
-                    convertedValue = Number(value);
+                    convertedValue = typeof value === 'object' ? Number.NaN : Number(value);
                     break;
                 case 'boolean':
-                    convertedValue = typeof value === 'string' ? value === 'true' : Boolean(value);
+                    switch (typeof value) {
+                        case 'boolean':
+                            convertedValue = Boolean(value);
+                            break;
+                        case 'string':
+                            convertedValue = value === 'true';
+                            break;
+                        case 'number':
+                            convertedValue = value === 1;
+                            break;
+                        default:
+                            convertedValue = false;
+                            break;
+                    }
                     break;
                 default:
                     convertedValue = value;
