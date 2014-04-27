@@ -17,7 +17,7 @@ This way, once resolved, all definitions of the JSON object will be accessible f
 ## Usage
 
 Suppose you need a reusable component in your web application using **AngularJS**.
-This component should work fine in every place where you place it, regardless of what surrounds it and independently of route changes of the application (and possible resolve function which come with it).
+This component should work fine everywhere you place it, regardless of what surrounds it and independently of route changes of the application (and possible resolve function which come with it).
 So, what do you need to do to achieve this requirements using *angular-component*?.
 
 Lets start defining the HTML component:
@@ -37,6 +37,13 @@ We already have our element, now we are going to define some properties and use 
     </component>
 
 Property *isMyFirstComponent* is accesible from the component scope once it has been resolved and we can use it for HTML manipulation.
+
+## Definition object options
+
+ - **name**: Name that will have the object in the component scope. (**Required**)
+ - **typeof**: Enforce to the value object to be of the type of. (**Optional**)
+ - **parent**: Object name of which depends to be resolved. Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
+ - **condition**: Expression that must be satisfied in order to resolve the object. (**Optional**)
 
 ## Acknowledgments
 
