@@ -13,12 +13,10 @@ module.exports = function(config) {
     files: [
       'demo/bower_components/angular/angular.js',
       'demo/bower_components/angular-mocks/angular-mocks.js',
-      'demo/bower_components/angular-resource/angular-resource.js',
-      'demo/bower_components/angular-cookies/angular-cookies.js',
-      'demo/bower_components/angular-sanitize/angular-sanitize.js',
       'demo/bower_components/angular-route/angular-route.js',
-      'demo/scripts/*.js',
-      'demo/scripts/**/*.js',
+      'module/*.js',
+        'demo/scripts/*.js',
+        'demo/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'
     ],

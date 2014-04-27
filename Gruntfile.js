@@ -31,7 +31,7 @@ module.exports = function (grunt) {
       name: 'angular-component',
       description: 'Módulo de AngularJS para definir componentes reutilizables de forma sencilla',
       version: '0.0.1',
-      github: 'https://github.com/pablolazaro',
+      github: 'https://github.com/pablolazaro/angular-component',
       license: '',
       banner: ['/**',
                   ' * <%= meta.name %> - <%= meta.description %>',
@@ -97,7 +97,8 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             'test',
-            '<%= yeoman.demo %>'
+            '<%= yeoman.demo %>',
+            '<%= yeoman.app %>'
           ]
         }
       },
