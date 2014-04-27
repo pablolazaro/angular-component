@@ -51,7 +51,7 @@ Property *isMyFirstComponent* is accessible from the component scope once it has
 		 `{ "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName" }`
  - `condition`: Expression that must be satisfied in order to resolve the object. (**Optional**)
 		 `{ "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName", "condition": "{{parentVariableName === true}}" }`
- - `expression`: The value of the expression will be the value of the object. You could use AngularJS expression. (**Optional**)
+ - `expression`: The value of the expression will be the value of the object. You could use AngularJS expressions. (**Optional**)
 		`{ "name": "parentVariableName", "expression": "true === true"}`
  - `http`: The value of the expression will be the response of the HTTP GET request defined. You could configure the request this way:
 	- `url`: Request URL as string, you could use AngularJS expressions. (**Required**)
@@ -64,4 +64,4 @@ You can not use `expression` and `http` at the same time.
 
 ## Acknowledgments
 
-For those developers of the VASS company who work in the CCLI project, because I owe them the initial idea of this module.
+For those developers of the VASS company who work in the CCLI project, because I owe them the idea of this module.

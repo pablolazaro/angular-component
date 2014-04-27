@@ -28,10 +28,17 @@
               <div class="well">
                   <component name="demoComponent"
                              definition='[
-                                            { "name": "myVar", "expression": "true" }
+                                            { "name": "limit", "typeof": "number", "http": { "url": "/api/config/limit" } },
+                                            { "name": "contacts", "http": { "url": "/api/contacts" } },
+                                            { "name": "isLimited", "typeof":"boolean", "expression": "{{limit === contacts.length}}" }
                                          ]'>
 
-                      {{myVar}}
+                      <ul ng-repeat="contact in contacts | limitTo: limit">
+                          <li>{{contact.name}} - {{contact.phone}}</li>
+                      </ul>
+
+                      <a ng-show="isLimited" ng-click="isLimited=false; limit=50"href="">Show all contacts</a>
+
                   </component>
               </div>
           </div>
@@ -53,6 +60,7 @@
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <script src="lib/component.js"></script>
     <script src="scripts/app.js"></script>
 </body>
