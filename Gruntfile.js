@@ -29,7 +29,7 @@ module.exports = function (grunt) {
     meta: {
       author: 'Pablo Lázaro Palencia',
       name: 'angular-component',
-      description: 'Useful module for defining reusable components in a easy way.',
+      description: 'Useful module for define reusable components in a easy way.',
       version: '0.0.1',
       github: 'https://github.com/pablolazaro/angular-component',
       license: '',
@@ -306,7 +306,6 @@ module.exports = function (grunt) {
       'bower-install',
       'copy:demo',
       'concurrent:server',
-      'autoprefixer',
       'connect:livereload',
       'watch'
     ]);
