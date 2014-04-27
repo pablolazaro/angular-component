@@ -1,6 +1,6 @@
 # angular-component [![Build Status](https://travis-ci.org/pablolazaro/angular-component.svg?branch=master)](https://travis-ci.org/pablolazaro/angular-component)
 
-> Useful module for define reusable components in a easy way.
+Useful module for define reusable components in a easy way.
 
 ## How it works
 
@@ -12,12 +12,12 @@
         { "name": "myStringVar", "typeof": "string", "parent": "myNumberVar", "http": { "url": "api/telefono/{{myNumberVar}}", "responseName": "myString" } }
     ]
 
-This way, once resolved, all definitions of the JSON object will be accessible from the component scope, and without writing any piece of  JavaScript code!
+This way, once all definitions has been resolved they will be accessible from the component scope, and without writing any piece of  JavaScript code!
 
 ## Usage
 
 Suppose you need a reusable component in your web application using **AngularJS**.
-This component should work fine everywhere you place it, regardless of what surrounds it and independently of route changes of the application (and possible resolve function which come with it).
+This component should work fine everywhere you place it, regardless of what surrounds it and also of route changes of the application (and possible resolve function which come with it).
 So, what do you need to do to achieve this requirements using *angular-component*?.
 
 Lets start defining the HTML component:
@@ -26,7 +26,7 @@ Lets start defining the HTML component:
         <p>Hello Word from my first component</p>
     </component>
 
-We already have our element, now we are going to define some properties and use them inside the component:
+We already have got the element, now we are going to define some properties and use them inside the component:
 
     <component name="myFirstComponent" 
                definition="[
@@ -36,13 +36,15 @@ We already have our element, now we are going to define some properties and use 
         <p ng-show="isMyFirstComponent">Hello Word from my first component</p>
     </component>
 
-Property *isMyFirstComponent* is accesible from the component scope once it has been resolved and we can use it for HTML manipulation.
+Property *isMyFirstComponent* is accessible from the component scope once it has been resolved and we can use it for HTML manipulation.
+
+[...]
 
 ## Definition object options
 
  - **name**: Name that will have the object in the component scope. (**Required**)
- - **typeof**: Enforce to the value object to be of the type of. (**Optional**)
- - **parent**: Object name of which depends to be resolved. Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
+ - **typeof**: Will convert the object value to specified type. (**Optional**)
+ - **parent**: Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
  - **condition**: Expression that must be satisfied in order to resolve the object. (**Optional**)
 
 ## Acknowledgments
