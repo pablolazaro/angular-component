@@ -5,7 +5,7 @@ angular.module('angular-component', ['ng'])
 .service('ResolverService', function ($http, $interpolate, $log, $q) {
 
     /**
-     * Objeto de constantes.
+     * Constants object.
      * @type {Object}
      */
     this.DefinitionType = {
