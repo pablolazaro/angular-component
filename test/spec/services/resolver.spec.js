@@ -52,7 +52,7 @@ describe('Unit: Testing ResolverService', function () {
         expect(ResolverService.resolveCondition).not.toBe(undefined);
     }]));
 
-    it('ResolverService should resolve conditions correctly', inject(['ResolverService', function (ResolverService) {
+    it('method resolveCondition should resolve conditions correctly', inject(['ResolverService', function (ResolverService) {
         var scope = {};
 
         scope.myTrueVar = true;
@@ -66,6 +66,15 @@ describe('Unit: Testing ResolverService', function () {
         expect(ResolverService.resolveCondition('{{myFalseVar === true}}', scope)).toBe(false);
         expect(ResolverService.resolveCondition('{{"true" === true}}', scope)).toBe(false);
     }]));
+
+    it('ResolverService should contains expressionResolver method', inject(['ResolverService', function (ResolverService) {
+        expect(ResolverService.expressionResolver).not.toBe(undefined);
+    }]));
+
+    it('ResolverService should contains httpResolver method', inject(['ResolverService', function (ResolverService) {
+        expect(ResolverService.httpResolver).not.toBe(undefined);
+    }]));
+
 
 });
 
