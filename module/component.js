@@ -171,7 +171,7 @@ angular.module('angular-component', ['ng'])
             resolverDeferred = $q.defer();
 
         if (definition.parent && angular.isUndefined(scope[definition.parent])) {
-            this.waitForParent(definition, scope, this.resolveByType, resolverDeferred);
+            waitForParent(definition, scope, this.resolveByType, resolverDeferred);
         } else {
             if ((!definition.condition) || (definition.condition && resolveCondition(definition.condition, scope))) {
                 this.resolveByType(definition, scope, resolverDeferred);
@@ -300,7 +300,7 @@ angular.module('angular-component', ['ng'])
     resolveDefinitions = function (definitions, scope) {
         var promises = [];
 
-        this.validateArguments(definitions, scope);
+        validateArguments(definitions, scope);
 
         angular.forEach(definitions, function (definition) {
             var definitionPromise = parseDefinition(definition, scope);
