@@ -43,9 +43,23 @@ Property *isMyFirstComponent* is accessible from the component scope once it has
 ## Definition object options
 
  - **name**: Name that will have the object in the component scope. (**Required**)
+ 	- Example: { "name": "myPhoneId" }
  - **typeof**: Will convert the object value to specified type. (**Optional**)
+ 	- Example: { "name": "myPhoneId", "typeof": "number" }
  - **parent**: Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
+ 	- Example: { "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName" }
  - **condition**: Expression that must be satisfied in order to resolve the object. (**Optional**)
+ 	- Example: { "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName", "condition": "{{parentVariableName === true}}" }
+ - **expression**: The value of the expression will be the value of the object. You could use AngularJS expression. (**Optional**)
+	- Example: { "name": "parentVariableName", "expression": "true === true"}
+ - **http**: The value of the expression will be the response of the HTTP GET request defined. You could configure the request this way:
+	- **url**: Request URL as string, you could use AngularJS expressions. (**Required**)
+		- Example: { "url": "/api/phones/{{myPhoneId}}"}
+	- **responseName**: Name of the object in response which contains desired value. If empty, definition object name will be use. (**Optional**)
+		- Example: { "url": "/api/phones/{{myPhoneId}}"}
+	- **config**: Configuration object which will be passed to $http service. (**Optional**)
+
+You only can use **expression** or **http** at the same time.
 
 ## Acknowledgments
 
