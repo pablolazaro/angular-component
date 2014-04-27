@@ -2,13 +2,26 @@
 
 angular.module('angular-component', ['ng'])
 
-.service('ResolverService', function ($http, $interpolate, $log, $q) {
+.factory('ResolverService', function ($http, $interpolate, $log, $q) {
+    var DefinitionType,
+        Definition,
+        convertToType,
+        resolveCondition,
+        waitForParent,
+        expressionResolver,
+        httpResolver,
+        Resolver,
+        getResolver,
+        validateDefinition,
+        parseDefinition,
+        validateArguments,
+        resolveDefinitions;
 
     /**
      * Constants object.
      * @type {Object}
      */
-    this.DefinitionType = {
+    DefinitionType = {
         EXPRESSION: 'expression',
         HTTP: 'http'
     };
@@ -18,7 +31,7 @@ angular.module('angular-component', ['ng'])
      * @param {Object} definition Objeto de definición inicial
      * @returns {{}}
      */
-    this.Definition = function (definition) {
+    Definition = function (definition) {
         var object = {};
 
         object.name = definition.name;
@@ -27,10 +40,10 @@ angular.module('angular-component', ['ng'])
         object.condition = definition.condition;
 
         if (definition.expression) {
-            object.type = this.DefinitionType.EXPRESSION;
+            object.type = DefinitionType.EXPRESSION;
             object.expression = definition.expression;
         } else if (definition.http) {
-            object.type = this.DefinitionType.HTTP;
+            object.type = DefinitionType.HTTP;
             object.http = definition.http;
         }
 
@@ -44,7 +57,7 @@ angular.module('angular-component', ['ng'])
      * @param   {String}  type      Tipo al que el valor será convertido
      * @returns {*}                 El valor convertido en el tipo especificado
      */
-    this.convertToType = function (value, type) {
+    convertToType = function (value, type) {
         try {
             var convertedValue;
 
@@ -82,13 +95,13 @@ angular.module('angular-component', ['ng'])
         }
     };
 
-    this.resolveCondition = function (condition, scope) {
+    resolveCondition = function (condition, scope) {
         var interpolatedCondition = $interpolate(condition)(scope);
-        return this.convertToType(interpolatedCondition, 'boolean');
+        return convertToType(interpolatedCondition, 'boolean');
     };
 
 
-    this.waitForParent = function (definition, scope, resolve, deferred) {
+    waitForParent = function (definition, scope, resolve, deferred) {
         $log.debug('Se pospone la resolución de la definición <<' + definition.name + '>> porque tiene una dependencia con <<' + definition.parent + '>> y esta aún no está resuelta');
 
         scope.$on(definition.parent , function (event, value) {
@@ -98,7 +111,7 @@ angular.module('angular-component', ['ng'])
             } else {
                 $log.debug('Definición <<' + definition.parent + '>> resuelta. Se procede a resolver la definición <<' + definition.name + '>>');
 
-                if ((!definition.condition) || (definition.condition && this.resolveCondition(definition.condition, scope))) {
+                if ((!definition.condition) || (definition.condition && resolveCondition(definition.condition, scope))) {
                     resolve(definition, scope, deferred);
                 } else {
                     $log.debug('No se ha resuelto la definición <<' + definition.name + '>> ya que su condicion no se cumple');
@@ -108,7 +121,7 @@ angular.module('angular-component', ['ng'])
         });
     };
 
-    this.expressionResolver = function (definition, scope, deferred) {
+    expressionResolver = function (definition, scope, deferred) {
         try {
             var expressionResolved = $interpolate(definition.expression)(scope);
 
@@ -118,7 +131,7 @@ angular.module('angular-component', ['ng'])
         }
     };
 
-    this.httpResolver = function (definition, scope, deferred) {
+    httpResolver = function (definition, scope, deferred) {
         try {
             var httpRequest = definition.http,
                 httpResolved,
@@ -143,7 +156,7 @@ angular.module('angular-component', ['ng'])
      * @param specificResolver
      * @constructor
      */
-    this.Resolver = function (specificResolver) {
+    Resolver = function (specificResolver) {
         this.resolveByType = specificResolver;
     };
 
@@ -153,14 +166,14 @@ angular.module('angular-component', ['ng'])
      * @param scope
      * @returns {*}
      */
-    this.Resolver.prototype.resolve = function (definition, scope) {
+    Resolver.prototype.resolve = function (definition, scope) {
         var deferred = $q.defer(),
             resolverDeferred = $q.defer();
 
         if (definition.parent && angular.isUndefined(scope[definition.parent])) {
             this.waitForParent(definition, scope, this.resolveByType, resolverDeferred);
         } else {
-            if ((!definition.condition) || (definition.condition && this.resolveCondition(definition.condition, scope))) {
+            if ((!definition.condition) || (definition.condition && resolveCondition(definition.condition, scope))) {
                 this.resolveByType(definition, scope, resolverDeferred);
             } else {
                 $log.debug('No se ha resuelto la definición <<' + definition.name + '>> ya que su condicion no se cumple');
@@ -171,7 +184,7 @@ angular.module('angular-component', ['ng'])
         resolverDeferred.promise.then(function (object) {
             if (object !== null) {
                 if (definition.typeof) {
-                    object = this.convertToType(object, definition.typeof);
+                    object = convertToType(object, definition.typeof);
                 }
 
                 scope[definition.name] = object;
@@ -199,15 +212,15 @@ angular.module('angular-component', ['ng'])
      * @param   {String}    type    Tipo de la definición a resolver
      * @returns {Function}          Función que resolverá la definición
      */
-    this.getResolver = function (type) {
+    getResolver = function (type) {
         var resolver;
 
         switch (type) {
             case DefinitionType.EXPRESSION:
-                resolver = new Resolver(this.expressionResolver);
+                resolver = new Resolver(expressionResolver);
                 break;
             case DefinitionType.HTTP:
-                resolver = new Resolver(this.httpResolver);
+                resolver = new Resolver(httpResolver);
                 break;
             default:
                 throw new Error('El tipo de definición <<' + type + '>> no está actualmente soportado.');
@@ -221,7 +234,7 @@ angular.module('angular-component', ['ng'])
      *
      * @param {Object}      definition  Objeto de definición a validar
      */
-    this.validateDefinition = function (definition) {
+    validateDefinition = function (definition) {
         var validationError;
 
         if (angular.isObject(definition)) {
@@ -256,19 +269,19 @@ angular.module('angular-component', ['ng'])
      * @param   {Object}    scope       Scope asociado a la definición
      * @return  {Object}                Objeto promise con el resultado de la definición
      */
-    this.parseDefinition = function (definition, scope) {
+    parseDefinition = function (definition, scope) {
         var parsedDefinition, definitionPromise;
 
-        this.validateDefinition(definition);
+        validateDefinition(definition);
 
-        parsedDefinition = new this.Definition(definition);
-        definitionPromise = this.getResolver(parsedDefinition.type).resolve(parsedDefinition, scope);
+        parsedDefinition = new Definition(definition);
+        definitionPromise = getResolver(parsedDefinition.type).resolve(parsedDefinition, scope);
 
         return definitionPromise;
     };
 
 
-    this.validateArguments = function (definitions, scope) {
+    validateArguments = function (definitions, scope) {
         var error;
 
         if (angular.isArray(definitions)) {
@@ -284,18 +297,31 @@ angular.module('angular-component', ['ng'])
         }
     };
 
-    this.resolveDefinitions = function (definitions, scope) {
+    resolveDefinitions = function (definitions, scope) {
         var promises = [];
 
         this.validateArguments(definitions, scope);
 
         angular.forEach(definitions, function (definition) {
-            var definitionPromise = this.parseDefinition(definition, scope);
+            var definitionPromise = parseDefinition(definition, scope);
             promises.push(definitionPromise);
         });
 
         return $q.all(promises);
-    }
+    };
+
+    return {
+        convertToType: convertToType,
+        expressionResolver: expressionResolver,
+        getResolver: getResolver,
+        httpResolver: httpResolver,
+        parseDefinition: parseDefinition,
+        resolveCondition: resolveCondition,
+        resolveDefinitions: resolveDefinitions,
+        validateArguments: validateArguments,
+        validateDefinition: validateDefinition,
+        waitForParent: waitForParent
+    };
 
 })
 
