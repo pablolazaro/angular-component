@@ -19,3 +19,7 @@ This way, once resolved, all definitions of the JSON object will be accessible f
 Suppose you need a reusable component in your web application using **AngularJS**.
 This component should work fine in every place where you place it, regardless of what surrounds it and independently of route changes of the application (and possible resolve function which come with it).
 So, what do you need to do to achieve this requirements using *angular-component*?.
+
+## Acknowledgments
+
+For those developers of the VASS company who work in the CCLI project, because I owe them the initial idea of this module.
