@@ -75,6 +75,50 @@ describe('Unit: Testing ResolverService', function () {
         expect(ResolverService.httpResolver).not.toBe(undefined);
     }]));
 
+    it('ResolverService should contains resolveDependency method', inject(['ResolverService', function (ResolverService) {
+        expect(ResolverService.resolveDependency).not.toBe(undefined);
+    }]));
+
+    it('ResolverService should contains resolveDependencies method', inject(['ResolverService', function (ResolverService) {
+        expect(ResolverService.resolveDependencies).not.toBe(undefined);
+    }]));
+
+    it('method resolveDependency should resolve dependency correctly', inject(['ResolverService', '$rootScope', function (ResolverService, $rootScope) {
+        var scope = $rootScope.$new();
+
+        setTimeout(function () {
+            scope.myDependency = 'resolved';
+            scope.myNullDependency = null;
+            scope.$apply();
+        }, 2000);
+
+        ResolverService.resolveDependency('myDependency', scope).then(function (value) {
+            expect(value).toBe('resolved');
+        }, function (error) {
+            expect(error).toBe('resolved');
+        });
+
+        ResolverService.resolveDependency('myNullDependency', scope).then(function (value) {
+            expect(value).toBe('resolved');
+        }, function (error) {
+            expect(error).toBe('myNullDependency is null');
+        });
+    }]));
+
+    it('method resolveDependency should reject dependency correctly', inject(['ResolverService', '$rootScope', function (ResolverService, $rootScope) {
+        var scope = $rootScope.$new();
+
+        setTimeout(function () {
+            scope.myNullDependency = null;
+            scope.$apply();
+        }, 2000);
+
+        ResolverService.resolveDependency('myNullDependency', scope).then(function (value) {
+            expect(value).toBe('resolved');
+        }, function (error) {
+            expect(error).toBe('myNullDependency is null');
+        });
+    }]));
 
 });
 

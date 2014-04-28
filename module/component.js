@@ -15,7 +15,81 @@ angular.module('angular-component', ['ng'])
         validateDefinition,
         parseDefinition,
         validateArguments,
-        resolveDefinitions;
+        resolveDefinitions,
+        resolveDependency,
+        resolveDependencies,
+        isScope;
+
+
+    /**
+     * Check if an object is an AngularJS scope.
+     * @param {Object}  obj     Object to check
+     * @returns If is a scope
+     */
+    isScope = function (obj) {
+        return obj && obj.$evalAsync && obj.$watch;
+    }
+
+    /**
+     * Returns a promise which will be resolved when dependency takes a value distinct of undefined.
+     * Null value will be recognised like an error and will reject the promise.
+     *
+     * @param {String}  dependency  Name of the dependency in the scope to wait for be resolved
+     * @param {Object}  scope       Scope which contains the dependency
+     * @returns {Object}            A promise
+     */
+    resolveDependency = function (dependency, scope) {
+        var deferred = $q.defer(),
+            watcher;
+
+        if (dependency && isScope(scope)) {
+            if (scope[dependency] !== null) {
+                if (scope[dependency] === undefined) {
+                    watcher = scope.$watch(dependency, function (value) {
+                        if (value !== undefined) {
+                            if (value !== null) {
+                                watcher();
+                                deferred.resolve(scope[dependency]);
+                            } else {
+                                watcher();
+                                deferred.reject(dependency + ' is null');
+                            }
+                        }
+                    });
+                } else {
+                    deferred.resolve(scope[dependency]);
+                }
+            } else {
+                deferred.reject(dependency + ' is null');
+            }
+        } else {
+            throw new Error('Arguments are not valid, dependency object must be defined and scope an AngularJS scope');
+        }
+
+        return deferred.promise;
+    }
+
+    /**
+     * Returns a global promise containing all promises listening to dependencies resolution,
+     * when all dependencies are resolved, an array with all resolved values will be returned.
+     *
+     * @param dependencies Array which contains all dependencies
+     * @param scope Scope which contains the dependency
+     * @returns A global promise
+     */
+    resolveDependencies = function (dependencies, scope) {
+        if (angular.isArray(dependencies) && isScope(scope)) {
+            var promises = [];
+
+            angular.forEach(dependencies, function (dependency) {
+                promises.push(resolveDependency(dependency, scope));
+            })
+
+            return $q.all(promises);
+        } else {
+            throw new Error('Arguments are not valid, dependencies object must be an Array and scope an AngularJS scope');
+        }
+    };
 
     /**
      * Constants object.
@@ -320,7 +394,9 @@ angular.module('angular-component', ['ng'])
         resolveDefinitions: resolveDefinitions,
         validateArguments: validateArguments,
         validateDefinition: validateDefinition,
-        waitForParent: waitForParent
+        waitForParent: waitForParent,
+        resolveDependencies: resolveDependencies,
+        resolveDependency: resolveDependency
     };
 
 })
