@@ -47,7 +47,7 @@ Property *isMyFirstComponent* is accessible from the component scope once it has
 		`{ "name": "myPhoneId" }`
  - `typeof`: Will convert the object value to specified type. (**Optional**)
 		 `{ "name": "myPhoneId", "typeof": "number" }`
- - `parent`: Object only will be resolved when parent object has been created. Currently only one parent is allowed. (**Optional**)
+ - `dependencies`: Object only will be resolved when all dependencies has been created and has a value distinct of null. (**Optional**)
 		 `{ "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName" }`
  - `condition`: Expression that must be satisfied in order to resolve the object. (**Optional**)
 		 `{ "name": "myPhoneId", "typeof": "number", "parent": "parentVariableName", "condition": "{{parentVariableName === true}}" }`

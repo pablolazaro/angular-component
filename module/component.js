@@ -3,7 +3,7 @@
 angular.module('angular-component', ['ng'])
 
 .factory('ResolverService', function ($http, $interpolate, $log, $q) {
-        
+
     var DefinitionType,
         Definition,
         convertToType,
