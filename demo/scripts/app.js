@@ -3,10 +3,6 @@
 var app = angular.module('demoApp', ['angular-component', 'ngMockE2E']);
 
 app.run(function($httpBackend) {
-    $httpBackend.whenGET('/views/templates/queries.html').passThrough();
-    $httpBackend.whenGET('views/builder.html').passThrough();
-
-
     var contacts = [
         { name: 'Pepe', phone: '756231242'},
         { name: 'Mario', phone: '654738392'},
@@ -25,4 +21,5 @@ app.run(function($httpBackend) {
     $httpBackend.whenGET('/api/contacts').respond({contacts: contacts});
     $httpBackend.whenGET('/api/config/limit').respond({limit: 5});
 });
+
 angular.bootstrap(document, ['demoApp']);
