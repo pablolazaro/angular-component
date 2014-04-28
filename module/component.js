@@ -3,11 +3,11 @@
 angular.module('angular-component', ['ng'])
 
 .factory('ResolverService', function ($http, $interpolate, $log, $q) {
+        
     var DefinitionType,
         Definition,
         convertToType,
         resolveCondition,
-        waitForParent,
         expressionResolver,
         httpResolver,
         Resolver,
@@ -109,7 +109,7 @@ angular.module('angular-component', ['ng'])
         var object = {};
 
         object.name = definition.name;
-        object.parent = definition.parent;
+        object.dependencies = definition.dependencies;
         object.typeof = definition.typeof;
         object.condition = definition.condition;
 
@@ -174,27 +174,6 @@ angular.module('angular-component', ['ng'])
         return convertToType(interpolatedCondition, 'boolean');
     };
 
-
-    waitForParent = function (definition, scope, resolve, deferred) {
-        $log.debug('Se pospone la resolución de la definición <<' + definition.name + '>> porque tiene una dependencia con <<' + definition.parent + '>> y esta aún no está resuelta');
-
-        scope.$on(definition.parent , function (event, value) {
-            if (value === null) {
-                $log.debug('No se ha resuelto la definición <<' + definition.name + '>> ya que su padre <<' + definition.parent + '>> tampoco se ha resuelto');
-                deferred.resolve(null);
-            } else {
-                $log.debug('Definición <<' + definition.parent + '>> resuelta. Se procede a resolver la definición <<' + definition.name + '>>');
-
-                if ((!definition.condition) || (definition.condition && resolveCondition(definition.condition, scope))) {
-                    resolve(definition, scope, deferred);
-                } else {
-                    $log.debug('No se ha resuelto la definición <<' + definition.name + '>> ya que su condicion no se cumple');
-                    deferred.resolve(null);
-                }
-            }
-        });
-    };
-
     expressionResolver = function (definition, scope, deferred) {
         try {
             var expressionResolved = $interpolate(definition.expression)(scope);
@@ -242,18 +221,19 @@ angular.module('angular-component', ['ng'])
      */
     Resolver.prototype.resolve = function (definition, scope) {
         var deferred = $q.defer(),
-            resolverDeferred = $q.defer();
+            resolverDeferred = $q.defer(),
+            that = this;
 
-        if (definition.parent && angular.isUndefined(scope[definition.parent])) {
-            waitForParent(definition, scope, this.resolveByType, resolverDeferred);
-        } else {
+        resolveDependencies(definition.dependencies || [], scope).then(function () {
             if ((!definition.condition) || (definition.condition && resolveCondition(definition.condition, scope))) {
-                this.resolveByType(definition, scope, resolverDeferred);
+                that.resolveByType(definition, scope, resolverDeferred);
             } else {
                 $log.debug('No se ha resuelto la definición <<' + definition.name + '>> ya que su condicion no se cumple');
                 resolverDeferred.resolve(null);
             }
-        }
+        }, function (error) {
+            resolverDeferred.reject(error);
+        });
 
         resolverDeferred.promise.then(function (object) {
             if (object !== null) {
@@ -265,11 +245,8 @@ angular.module('angular-component', ['ng'])
 
                 $log.debug('Se ha resuelto la definición <<' + definition.name + '>> con valor: ' + JSON.stringify(object));
 
-                scope.$broadcast(definition.name, object);
-
                 deferred.resolve(object);
             } else {
-                scope.$broadcast(definition.name, null);
                 deferred.resolve(null);
             }
         }, function (error) {
@@ -394,7 +371,6 @@ angular.module('angular-component', ['ng'])
         resolveDefinitions: resolveDefinitions,
         validateArguments: validateArguments,
         validateDefinition: validateDefinition,
-        waitForParent: waitForParent,
         resolveDependencies: resolveDependencies,
         resolveDependency: resolveDependency
     };
