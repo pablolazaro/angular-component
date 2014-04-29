@@ -1,6 +1,7 @@
 {
-  "name": "angularcomponent",
-  "version": "0.0.0",
+  "name": "angular-component",
+  "description": "Useful module for define reusable components in a easy way",
+  "version": "0.0.1",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -34,7 +35,15 @@
     "karma-ng-html2js-preprocessor": "~0.1.0",
     "karma-jasmine": "latest",
     "karma-chrome-launcher": "latest",
-    "karma-firefox-launcher": "latest"
+    "karma-firefox-launcher": "latest",
+    "gulp": "latest",
+    "gulp-concat": "latest",
+    "gulp-clean": "~0.2.4",
+    "gulp-ngmin": "~0.2.0",
+    "gulp-uglify": "~0.2.1",
+    "gulp-header": "~1.0.2",
+    "gulp-karma": "0.0.4",
+    "gulp-bower": "0.0.4"
   },
   "engines": {
     "node": ">=0.8.0"

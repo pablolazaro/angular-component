@@ -1,8 +1,4 @@
-'use strict';
-
-angular.module('angular-component', ['ng'])
-
-.factory('ResolverService', function ($http, $interpolate, $log, $q) {
+angular.module('angular-component').factory('ResolverService', function ($http, $interpolate, $log, $q) {
 
     var DefinitionType,
         Definition,
@@ -373,53 +369,6 @@ angular.module('angular-component', ['ng'])
         validateDefinition: validateDefinition,
         resolveDependencies: resolveDependencies,
         resolveDependency: resolveDependency
-    };
-
-})
-
-.directive('component', function ($log, ResolverService) {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: true,
-        controller: function ($scope) {
-            $scope.definitionsResolved = false;
-
-            this.resolveDefinitions = function (definitions) {
-                var start = new Date().getTime(),
-                    end;
-
-                ResolverService.resolveDefinitions(definitions, $scope).then(function (resolvedPromises) {
-                    $scope.definitionsResolved = true;
-
-                    end = new Date().getTime();
-
-                    $log.debug('Definitions resolved in ' + (end - start) + 'ms');
-                }, function (error) {
-                    $log.error('No se ha podido resolver alguna de las definiciones.\n' + error.message);
-                });
-            };
-        },
-        compile: function (element, attrs) {
-            var stringDefinition = attrs.definition,
-                jsonDefinition;
-
-            return function postLink (scope, iElement, iAttrs, controller) {
-                if (stringDefinition) {
-                    $log.debug('Se ha encontrado una directiva <<component>> con la siguiente lista de definiciones:');
-                    $log.debug(stringDefinition);
-
-                    try {
-                        jsonDefinition = JSON.parse(stringDefinition);
-                    } catch (error) {
-                        throw new Error('Error al transformar el objeto de definición.\n' + error.message);
-                    }
-
-                    controller.resolveDefinitions(jsonDefinition);
-                }
-            };
-        }
     };
 
 });
