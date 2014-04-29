@@ -165,7 +165,7 @@ angular.module('angular-component', ['ng'])
 
             return convertedValue;
         } catch (error) {
-            throw new Error('Error al convertir el valor ' + value + ' al tipo ' + type + '.\n' + error.message);
+            throw new Error('Error al convertir el valor ' + value + ' al tipo ' + type + '.\n' + (error.message || error));
         }
     };
 
@@ -180,7 +180,7 @@ angular.module('angular-component', ['ng'])
 
             deferred.resolve(expressionResolved);
         } catch (error) {
-            deferred.reject('Error al resolver la expresión de la definición <<' + definition.name + '>>.\n' + error.message);
+            deferred.reject('Error al resolver la expresión de la definición <<' + definition.name + '>>.\n' + (error.message || error));
         }
     };
 
@@ -193,14 +193,18 @@ angular.module('angular-component', ['ng'])
             interpolatedUrl = $interpolate(httpRequest.url)(scope);
 
             $http.get(interpolatedUrl, httpRequest.config || {}).then(function (response) {
-                httpResolved = httpRequest.responseName ? response.data[httpRequest.responseName] : response.data[definition.name];
-
+                if (httpRequest.responseName) {
+                    httpResolved = response.data[httpRequest.responseName];
+                } else {
+                    httpResolved = response.data[definition.name] || response.data;
+                }
+                
                 deferred.resolve(httpResolved);
             }, function (data, status) {
                 deferred.reject('Error en la petición para <<' + definition.name + '>>. El servidor ha devuelto un status ' + status);
             });
         } catch (error) {
-            deferred.reject('Error al resolver la expresión de la definición <<' + definition.name + '>>.\n' + error.message);
+            deferred.reject('Error al resolver la expresión de la definición <<' + definition.name + '>>.\n' + (error.message || error));
         }
     };
 
@@ -397,7 +401,7 @@ angular.module('angular-component', ['ng'])
 
                     $log.debug('Definitions resolved in ' + (end - start) + 'ms');
                 }, function (error) {
-                    $log.error('No se ha podido resolver alguna de las definiciones.\n' + error.message);
+                    $log.error('No se ha podido resolver alguna de las definiciones.\n' + (error.message || error));
                 });
             };
         },
@@ -413,7 +417,7 @@ angular.module('angular-component', ['ng'])
                     try {
                         jsonDefinition = JSON.parse(stringDefinition);
                     } catch (error) {
-                        throw new Error('Error al transformar el objeto de definición.\n' + error.message);
+                        throw new Error('Error al transformar el objeto de definición.\n' + (error.message || error));
                     }
 
                     controller.resolveDefinitions(jsonDefinition);
