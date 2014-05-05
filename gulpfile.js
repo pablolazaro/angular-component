@@ -11,6 +11,7 @@ var gulp   = require('gulp'),
     bower  = require('gulp-bower'),
     debug  = require('gulp-debug'),
     rename = require('gulp-rename'),
+    istanbul = require('gulp-istanbul'),
     log    = require('gulp-util').log,
     config = require('./gulp-config.json'),
     pkg    = require('./package.json');
@@ -44,17 +45,20 @@ gulp.task('bower', function () {
     return bower();
 });
 
+
 gulp.task('karma', function () {
-    return gulp.src('/test/spec/**/*.js')
-        .pipe(karma({
-            configFile: './test/karma.conf.js',
-            action: 'run'
-        }))
-        .on('error', function (error) {
-            log(error);
+    return gulp.src(config.testFiles)
+        .pipe(istanbul())
+        .on('end', function () {
+            gulp.src(config.testFiles)
+                .pipe(karma({
+                    configFile: './test/karma.conf.js',
+                    action: 'run'
+                }))
+                .pipe(istanbul.writeReports('./coverage'));
         });
 });
 
 gulp.task('release', ['compress']);
 
-gulp.task('test', ['clean', 'build', 'bower', 'karma']);
+gulp.task('test', ['build', 'karma']);
