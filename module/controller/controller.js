@@ -1,4 +1,4 @@
-angular.module('angular-component', ['ng']).controller('ComponentController', ['$scope', '$log', 'ResolverService', function ($scope, $log, ResolverService) {
+angular.module('angular-component').controller('ComponentController', ['$scope', '$log', 'ResolverService', function ($scope, $log, ResolverService) {
     $scope.definitionsResolved = false;
 
     this.resolveDefinitions = function (definitions) {
