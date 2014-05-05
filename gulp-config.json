@@ -1,0 +1,8 @@
+{
+	"sourceFolder": "./module/",
+	"distributionFolder": "./dist/",
+	"libraryName": "angular-component.js",
+	"minifiedLibraryName": "angular-component.min.js",
+	"headerFileName": "header.txt",
+	"headerCodification": "utf8"
+}
