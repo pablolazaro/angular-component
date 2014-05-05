@@ -11,52 +11,47 @@ var gulp   = require('gulp'),
     bower  = require('gulp-bower'),
     debug  = require('gulp-debug'),
     rename = require('gulp-rename'),
-    config = require('./config'),
+    log    = require('gulp-util').log,
+    config = require('./gulp-config.json'),
     pkg    = require('./package.json');
 
 
-/**
- * Task to clean distribution directory.
- */
 gulp.task('clean', function () {
+    log('Cleaning distribution folder...');
     return gulp.src(config.distributionFolder + '*.js', {read: false})
-        .pipe(clean());                                                                                         // Clean distribution directory
+        .pipe(clean());                                                                                         
 });
 
-/**
- * Task to build component library.
- */
 gulp.task('build', ['clean'], function () {
+    log('Building library...')
     return gulp.src(config.sourceFolder + '**/*.js')
-        .pipe(concat(config.libraryName))                                                                       // Concat all JavaScript files into one file
-        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        // Add header comment to concated file
-        .pipe(gulp.dest(config.distributionFolder))                                                             // Copy file to distribution folder
+        .pipe(concat(config.libraryName))                                                                       
+        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        
+        .pipe(gulp.dest(config.distributionFolder))                                                             
 });
 
 gulp.task('compress', ['build'], function() {
+    log('Compressing library...')
     return gulp.src(config.distributionFolder + config.libraryName)
-        .pipe(ngmin())                                                                                          // Ngmin file to avoid conflict using UglifyJS
-        .pipe(uglify())                                                                                         // Compress file using UglifyJS
-        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        // Add header comment to minified file
-        .pipe(rename(config.minifiedLibraryName))                                                               // Rename minified file
-        .pipe(gulp.dest(config.distributionFolder));                                                            // Copy file to distribution folder
+        .pipe(ngmin())                                                                                          
+        .pipe(uglify())                                                                                         
+        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        
+        .pipe(rename(config.minifiedLibraryName))                                                               
+        .pipe(gulp.dest(config.distributionFolder));                                                            
 });
 
-
 gulp.task('bower', function () {
-    bower();
-    gulp.src('./dist/angular-component.js')
-        .pipe(gulp.dest('./test/lib/'));
+    return bower();
 });
 
 gulp.task('karma', function () {
-    return gulp.src()
+    return gulp.src('/test/spec/**/*.js')
         .pipe(karma({
             configFile: './test/karma.conf.js',
             action: 'run'
         }))
         .on('error', function (error) {
-            throw error;
+            log(error);
         });
 });
 
