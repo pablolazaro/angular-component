@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp   = require('gulp'),
+    fs     = require('fs'),
     concat = require('gulp-concat'),
     clean  = require('gulp-clean'),
     ngmin  = require('gulp-ngmin'),
@@ -14,35 +15,31 @@ var gulp   = require('gulp'),
     pkg    = require('./package.json');
 
 
-var banner = [  '/**',
-                ' * <%= pkg.name %> - <%= pkg.description %>',
-                ' * @version v<%= pkg.version %>',
-                ' * @link <%= pkg.homepage %>',
-                ' * @license <%= pkg.license %>',
-                ' */',
-                ''].join('\n');
-
 /**
  * Task to clean distribution directory.
  */
 gulp.task('clean', function () {
     return gulp.src(config.distributionFolder + '*.js', {read: false})
-        .pipe(clean());
+        .pipe(clean());                                                                                         // Clean distribution directory
 });
 
 /**
  * Task to build component library.
  */
-gulp.task('build', function () {
-    gulp.src(config.sourceFolder + '**/*.js')
-        .pipe(concat(config.libraryName))            // Concat all JavaScript files into one file
-        .pipe(header(banner, { pkg : pkg } ))        // Add header comment to concated file
-        .pipe(gulp.dest(config.distributionFolder))  // Copy file to distribution folder
-        .pipe(ngmin())                               // Ngmin file to avoid conflict using UglifyJS
-        .pipe(uglify())                              // Compress file using UglifyJS
-        .pipe(header(banner, { pkg : pkg } ))        // Add header comment to minified file
-        .pipe(rename(config.minifiedLibraryName))    // Rename minified file
-        .pipe(gulp.dest(config.distributionFolder)); // Copy file to distribution folder
+gulp.task('build', ['clean'], function () {
+    return gulp.src(config.sourceFolder + '**/*.js')
+        .pipe(concat(config.libraryName))                                                                       // Concat all JavaScript files into one file
+        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        // Add header comment to concated file
+        .pipe(gulp.dest(config.distributionFolder))                                                             // Copy file to distribution folder
+});
+
+gulp.task('compress', ['build'], function() {
+    return gulp.src(config.distributionFolder + config.libraryName)
+        .pipe(ngmin())                                                                                          // Ngmin file to avoid conflict using UglifyJS
+        .pipe(uglify())                                                                                         // Compress file using UglifyJS
+        .pipe(header(fs.readFileSync(config.headerFileName, config.headerCodification), { pkg : pkg } ))        // Add header comment to minified file
+        .pipe(rename(config.minifiedLibraryName))                                                               // Rename minified file
+        .pipe(gulp.dest(config.distributionFolder));                                                            // Copy file to distribution folder
 });
 
 
@@ -63,6 +60,6 @@ gulp.task('karma', function () {
         });
 });
 
-gulp.task('release', ['clean', 'build']);
+gulp.task('release', ['compress']);
 
 gulp.task('test', ['clean', 'build', 'bower', 'karma']);
