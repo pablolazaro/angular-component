@@ -6,7 +6,8 @@
   "author": "Pablo Lázaro Palencia",
   "dependencies": {
     "gulp-debug": "~0.3.0",
-    "gulp-rename": "~1.2.0"
+    "gulp-rename": "~1.2.0",
+    "gulp-util": "~2.2.14"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
