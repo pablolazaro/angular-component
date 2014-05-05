@@ -4,5 +4,11 @@
 	"libraryName": "angular-component.js",
 	"minifiedLibraryName": "angular-component.min.js",
 	"headerFileName": "header.txt",
-	"headerCodification": "utf8"
+	"headerCodification": "utf8",
+	"testFiles": [ 
+	    "./lib/angular/angular.js",
+	    "./lib/angular-mocks/angular-mocks.js",
+	    "./dist/angular-component.js",
+	    "./test/spec/**/*.js"
+	]
 }
