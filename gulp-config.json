@@ -6,8 +6,8 @@
 	"headerFileName": "header.txt",
 	"headerCodification": "utf8",
 	"testFiles": [ 
-	    "./lib/angular/angular.js",
-	    "./lib/angular-mocks/angular-mocks.js",
+	    "./test/lib/angular/angular.js",
+	    "./test/lib/angular-mocks/angular-mocks.js",
 	    "./dist/angular-component.js",
 	    "./test/spec/**/*.js"
 	]

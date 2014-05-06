@@ -1,20 +1,20 @@
 'use strict';
 
-var gulp   = require('gulp'),
-    fs     = require('fs'),
-    concat = require('gulp-concat'),
-    clean  = require('gulp-clean'),
-    ngmin  = require('gulp-ngmin'),
-    uglify = require('gulp-uglify'),
-    header = require('gulp-header'),
-    karma  = require('gulp-karma'),
-    bower  = require('gulp-bower'),
-    debug  = require('gulp-debug'),
-    rename = require('gulp-rename'),
+var gulp     = require('gulp'),
+    fs       = require('fs'),
+    concat   = require('gulp-concat'),
+    clean    = require('gulp-clean'),
+    ngmin    = require('gulp-ngmin'),
+    uglify   = require('gulp-uglify'),
+    header   = require('gulp-header'),
+    karma    = require('gulp-karma'),
+    bower    = require('gulp-bower'),
+    debug    = require('gulp-debug'),
+    rename   = require('gulp-rename'),
     istanbul = require('gulp-istanbul'),
-    log    = require('gulp-util').log,
-    config = require('./gulp-config.json'),
-    pkg    = require('./package.json');
+    log      = require('gulp-util').log,
+    config   = require('./gulp-config.json'),
+    pkg      = require('./package.json');
 
 
 gulp.task('clean', function () {
@@ -45,8 +45,7 @@ gulp.task('bower', function () {
     return bower();
 });
 
-
-gulp.task('karma', function () {
+gulp.task('coverage', function() {
     return gulp.src(config.testFiles)
         .pipe(istanbul())
         .on('end', function () {
@@ -59,6 +58,14 @@ gulp.task('karma', function () {
         });
 });
 
+gulp.task('karma', function () {
+    return gulp.src(config.testFiles)
+        .pipe(karma({
+            configFile: './test/karma.conf.js',
+            action: 'run'
+        }));
+});
+
 gulp.task('release', ['compress']);
 
-gulp.task('test', ['build', 'karma']);
+gulp.task('test', ['build', 'bower', 'karma']);
