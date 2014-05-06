@@ -1,4 +1,7 @@
-# angular-component [![Build Status](https://travis-ci.org/pablolazaro/angular-component.svg?branch=master)](https://travis-ci.org/pablolazaro/angular-component)
+# angular-component 
+
+[![Build Status](https://travis-ci.org/pablolazaro/angular-component.svg?branch=master)](https://travis-ci.org/pablolazaro/angular-component)
+[![Code Climate](https://codeclimate.com/github/pablolazaro/angular-component.png)](https://codeclimate.com/github/pablolazaro/angular-component)
 
 Useful module for define reusable components in a easy way.
 
